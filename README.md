@@ -13,8 +13,8 @@ WebGL published here https://MikaelaUwU.github.io/MyFirstGame/
 - [x] I have added the `UNITY_LICENSE` secret to my repository with the Unity license key;
 - [x] I have added the `UNITY_USERNAME` secret to my repository with the Unity username;
 - [x] I have added the `UNITY_PASSWORD` secret to my repository with the Unity password;
-- [ ] I changed the `Settings` > `Actions` > `General` > `Workflow Permissions` to `Read and write permissions for actions`;
-- [ ] I cloned the repository to my local machine and opened the project in Unity and made changes to the project;
+- [x] I changed the `Settings` > `Actions` > `General` > `Workflow Permissions` to `Read and write permissions for actions`;
+- [x] I cloned the repository to my local machine and opened the project in Unity and made changes to the project;
 - [ ] I have committed and pushed the changes to the `main` or `master` branch of the repository;
 - [ ] I understand that every time I push to the `main` or `master` branch, the project will be built and deployed to the `gh-pages` branch;
 - [ ] I saw the GitHub Actions build the project;
