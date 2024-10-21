@@ -1,6 +1,6 @@
 # Unity WebGL CI/CD with GitHub Actions
 
-WebGL published here https://MikaelaUwU.github.io/MyFirstGame/
+WebGL published here https://MikaelaUwU.github.io/SimpleGame/
 
 # Setup Steps:
 
