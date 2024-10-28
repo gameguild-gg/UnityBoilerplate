@@ -1,6 +1,6 @@
 # Unity WebGL CI/CD with GitHub Actions
 
-WebGL published here https://MikaelaUwU.github.io/SimpleGame/
+WebGL published here https://MikaelaUwU.github.io/SaoBangUnityGame/
 
 # Setup Steps:
 
