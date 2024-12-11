@@ -28,3 +28,5 @@ WebGL published here https://MikaelaUwU.github.io/SaoBangUnityGame/
 - [x] I have read Semantic Versioning https://semver.org/ and understand how to version my project;
 - [x] I have read how Semantic versioning would work for unity here https://game.ci/docs/github/builder/#versioning 
 - [ ] I have set my first git tag to `0.1.0` to my latest commit on the `main` or `master` branch;
+
+I've been having trouble finishing this because I couldn't figure out how to transfer what I had on Unity in the classroom computer to GitHub and there were lots of Errors. So I've had to make a new Project and lost my code and use my laptop instead.
