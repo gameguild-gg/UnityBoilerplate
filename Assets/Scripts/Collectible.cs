@@ -20,6 +20,7 @@ public class Collectible : MonoBehaviour
         if (ball != null)
         {
             _scoreManager.Score++;
+            _scoreManager.CheckForMessage();
             Destroy(gameObject);
         }
     }
