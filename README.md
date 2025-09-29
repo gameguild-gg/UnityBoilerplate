@@ -1,6 +1,10 @@
 # Unity WebGL CI/CD with GitHub Actions
 
+<<<<<<< HEAD
 WebGL published here (EDIT IT!) https://github.com/Andykp1989/UnityBoilerplate.git
+=======
+WebGL published here https://github.com/Andykp1989/UnityBoilerplate.git
+>>>>>>> origin/master
 
 # Setup Steps:
 
