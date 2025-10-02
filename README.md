@@ -28,4 +28,3 @@ WebGL published here (EDIT IT!) https://AJMcLemore.github.io/UnityBoilerplate_te
 - [X] I have read Semantic Versioning https://semver.org/ and understand how to version my project;
 - [X] I have read how Semantic versioning would work for unity here https://game.ci/docs/github/builder/#versioning 
 - [ ] I have set my first git tag to `0.1.0` to my latest commit on the `main` or `master` branch;
-$ git tag -a 0.1.0 -m "my version 0.1.0"
