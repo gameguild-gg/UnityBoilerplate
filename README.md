@@ -20,7 +20,7 @@ WebGL published here (EDIT IT!) https://AJMcLemore.github.io/UnityBoilerplate_te
 - [X] I saw the GitHub Actions build the project;
 - [X] I changed the `Settings` > `Pages` > `Source` to `gh-pages` branch;
 - [X] I saw the GitHub Actions deploy the project to the `gh-pages` branch;
-- [ ] I can open the web build in the browser at the url: https://YOUR_GH_USERNAME.github.io/YOUR_REPO_NAME/
+- [X] I can open the web build in the browser at the url: https://YOUR_GH_USERNAME.github.io/YOUR_REPO_NAME/
 - [ ] I have read the https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow and understand the Gitflow workflow;
 - [ ] I understand that I should create a new branch for each feature or fix I am working on;
 - [ ] I have read the `.github/workflows/main.yml` file and understand how the GitHub Actions are working;
