@@ -1,0 +1,63 @@
+# Unity project git attributes
+# - Scenes/prefabs/assets use Unity's Smart Merge (see README to set it up)
+# - Text files keep consistent line endings across Windows/macOS/Linux
+# - Binary assets are never line-normalized or text-merged
+
+# --- Unity YAML: use UnityYAMLMerge (Smart Merge) ----------------------
+# Requires one-time local setup — see "Smart Merge" in the README.
+*.unity merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.asset merge=unityyamlmerge
+*.mat merge=unityyamlmerge
+*.controller merge=unityyamlmerge
+*.playable merge=unityyamlmerge
+
+# --- Text files: normalize to LF --------------------------------------
+*.cs text eol=lf diff=csharp
+*.asmdef text eol=lf
+*.asmref text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.meta text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.shader text eol=lf
+*.cginc text eol=lf
+*.hlsl text eol=lf
+*.txt text eol=lf
+
+# --- Binary assets: never normalize, never text-merge -----------------
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tga binary
+*.psd binary
+*.exr binary
+*.hdr binary
+*.tif binary
+*.tiff binary
+# Audio
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.aif binary
+*.aiff binary
+# Models / meshes
+*.fbx binary
+*.blend binary
+*.obj binary
+*.dae binary
+*.3ds binary
+# Fonts / video / misc
+*.ttf binary
+*.otf binary
+*.mp4 binary
+*.mov binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.exe binary
+*.unitypackage binary

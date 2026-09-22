@@ -5,6 +5,7 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
+.utmp/
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
@@ -26,6 +27,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Visual Studio Code
+.vscode/
+
 # Gradle cache directory
 .gradle/
 
@@ -35,6 +39,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user

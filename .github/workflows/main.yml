@@ -1,11 +1,39 @@
-﻿name: Actions 😎
+﻿name: CI/CD
 
 on: [push, pull_request]
 
+# This pipeline has three stages:
+#   1. test   — runs Edit Mode and Play Mode tests with game-ci's unity-test-runner
+#   2. build  — builds the project for WebGL with game-ci's unity-builder
+#   3. deploy — publishes the build to GitHub Pages using the official
+#               artifact-based deploy (actions/deploy-pages)
+#
+# The deploy job NEVER pushes a branch. GitHub's Pages service pulls the
+# deployment straight from an artifact, so the workflow token does not need
+# "Read and write permissions" and no gh-pages branch is created.
+#
+# Each job declares only the permissions it needs (least privilege).
+
+# Avoid two deploys racing each other when you push twice in a row.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Build my project ✨
+  # ------------------------------------------------------------------
+  # 1. TEST — runs on every push and pull request.
+  #    If any test fails, the build and deploy jobs are skipped.
+  # ------------------------------------------------------------------
+  test:
+    name: Run ${{ matrix.testMode }} tests
     runs-on: ubuntu-latest
+    permissions:
+      checks: write # publish test results to the GitHub Checks UI
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode: [EditMode, PlayMode]
     steps:
       # Checkout
       - name: Checkout repository
@@ -13,15 +41,62 @@ jobs:
         with:
           lfs: true
 
-      # Cache
+      # Cache the Unity Library folder between runs (big speedup)
       - uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-Tests-${{ matrix.testMode }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-
+            Library-Tests-
 
-      # Build
+      # Run the tests. The Docker image is picked automatically to match
+      # the Unity version in ProjectSettings/ProjectVersion.txt.
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v4
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          # Code coverage instrumentation is known to crash some Unity 6
+          # versions in CI. Enable it only if you need coverage reports.
+          coverageEnabled: false
+
+      # Upload test results (including on failure — `if: always()`)
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TestResults-${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  # ------------------------------------------------------------------
+  # 2. BUILD — only runs after all tests passed (`needs: test`).
+  # ------------------------------------------------------------------
+  build:
+    name: Build for WebGL
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-WebGL-
+
+      # Build. unityVersion picks the Docker image matching ProjectVersion.txt.
       - name: Build project
         uses: game-ci/unity-builder@v4
         env:
@@ -32,15 +107,50 @@ jobs:
           targetPlatform: WebGL
           unityVersion: auto
 
-      # Output
-      - uses: actions/upload-artifact@v4
+      # Upload the raw build as an artifact (downloadable from the run page).
+      # Path is the build output folder itself, so the artifact root contains
+      # index.html and the build files directly.
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: Build
-          path: build
+          name: Build-WebGL
+          path: build/WebGL/WebGL
 
-      # Deploy    
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+  # ------------------------------------------------------------------
+  # 3. DEPLOY — publishes the build artifact to GitHub Pages.
+  #    Only on pushes to the default branch (master or main).
+  #    Requires Settings > Pages > Source = "GitHub Actions".
+  # ------------------------------------------------------------------
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write # write to the Pages service
+      id-token: write # verify the workflow's identity to Pages
+      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Download the build produced by the build job (fresh runner, no files yet)
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          folder: build/WebGL/WebGL # The folder the action should deploy.
-          single-commit: true    
+          name: Build-WebGL
+          path: site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Package the site into the special "github-pages" artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      # Hand the artifact to the Pages service — no branch is pushed
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
