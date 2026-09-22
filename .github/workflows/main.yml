@@ -94,14 +94,12 @@ jobs:
         with:
           lfs: true
 
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-WebGL-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-WebGL-
-
-      # Build. unityVersion picks the Docker image matching ProjectVersion.txt.
+      # NOTE: no Library cache here on purpose. A restored Library makes the
+      # editor treat the WebGL build as already up to date, skip the player
+      # build, and exit without producing build output (the runner is
+      # ephemeral, so the previous build's files are gone) - the build then
+      # fails with exit code 137. A full build takes ~10 minutes and is
+      # deterministic. Test jobs cache Library safely; builds do not.
       - name: Build project
         uses: game-ci/unity-builder@v4
         env:
