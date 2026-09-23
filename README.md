@@ -2,8 +2,7 @@
 
 A Unity 6000.x project that teaches you proper CI/CD on GitHub:
 
-- **Tests first.** Every push and pull request runs Edit Mode and Play Mode tests. Failing tests block the build and the deploy.
-- **Build once.** After tests pass, the project builds for WebGL on a GitHub-hosted runner using [GameCI](https://game.ci).
+- **Build once.** On every push and pull request, the project builds for WebGL on a GitHub-hosted runner using [GameCI](https://game.ci).
 - **Deploy from artifact.** On pushes to the default branch, the build is published to GitHub Pages straight from the workflow artifact with GitHub's official `deploy-pages` action. **No `gh-pages` branch is pushed and the workflow never needs write access to your code** — each job only gets the permissions it declares.
 
 WebGL published here (EDIT IT!): https://YOUR_GH_USERNAME.github.io/YOUR_REPO_NAME/
@@ -26,35 +25,22 @@ WebGL published here (EDIT IT!): https://YOUR_GH_USERNAME.github.io/YOUR_REPO_NA
 
 # The pipeline:
 
-Read `.github/workflows/main.yml` — it is heavily commented and is the main teaching artifact of this repository. It runs three jobs in order:
+Read `.github/workflows/main.yml` — it is heavily commented and is the main teaching artifact of this repository. It runs two jobs in order:
 
-1. **test** — a matrix of Edit Mode and Play Mode tests (`game-ci/unity-test-runner@v4`). Results appear in the Actions run page and as check runs on the commit. A red test = red pipeline = no deploy.
-2. **build** — `game-ci/unity-builder@v4` builds WebGL. The build is uploaded as an artifact named `Build-WebGL` that you can download from any run page.
-3. **deploy** — only runs on pushes to `main`/`master`. It downloads the `Build-WebGL` artifact and hands it to `actions/deploy-pages@v4`. GitHub Pages pulls the site from the artifact, so the job needs only `pages: write` + `id-token: write` permissions — nothing can push to your branches.
+1. **build** — `game-ci/unity-builder@v4` builds WebGL. The build is uploaded as an artifact named `Build-WebGL` that you can download from any run page.
+2. **deploy** — only runs on pushes to `main`/`master`. It downloads the `Build-WebGL` artifact and hands it to `actions/deploy-pages@v4`. GitHub Pages pulls the site from the artifact, so the job needs only `pages: write` + `id-token: write` permissions — nothing can push to your branches.
 
 The Unity version is pinned by `ProjectSettings/ProjectVersion.txt`. GameCI reads it (`unityVersion: auto`) and picks the matching Docker image, so the local editor and CI always agree. To upgrade Unity, change the version locally and CI follows on the next push.
 
-- [ ] I have read the `.github/workflows/main.yml` file and understand how the three jobs connect (`needs:`) into a pipeline;
+- [ ] I have read the `.github/workflows/main.yml` file and understand how the two jobs connect (`needs:`) into a pipeline;
 - [ ] I understand that the deploy job has `if:` conditions limiting it to pushes on the default branch;
-- [ ] I understand that pull requests run tests and builds but never deploy;
-
-# Tests:
-
-Sample tests live in `Assets/Tests/EditMode` and `Assets/Tests/PlayMode`.
-
-- Run them locally with `Window` > `General` > `Test Runner`;
-- Edit Mode tests are fast, editor-only tests for plain C# logic;
-- Play Mode tests run the game loop (coroutines, physics, frames);
-- CI runs both suites on every push and pull request — extend them as you add gameplay code. Keep the pipeline green.
-
-- [ ] I ran the Test Runner locally and all tests pass;
-- [ ] I understand that if I break a test in CI, the build and deploy are blocked until I fix it;
+- [ ] I understand that pull requests run builds but never deploy;
 
 # Workflow habits:
 
 - [ ] I have read the https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow and understand the Gitflow workflow;
 - [ ] I understand that I should create a new branch for each feature or fix I am working on;
-- [ ] I understand that every time I push to the `main` or `master` branch, the project will be tested, built and deployed to GitHub Pages;
+- [ ] I understand that every time I push to the `main` or `master` branch, the project will be built and deployed to GitHub Pages;
 - [ ] If I want to customize my build, I will read the https://game.ci/docs/github/builder/ documentation;
 - [ ] I have read Semantic Versioning https://semver.org/ and understand how to version my project;
 - [ ] I have read how Semantic versioning would work for unity here https://game.ci/docs/github/builder/#versioning
