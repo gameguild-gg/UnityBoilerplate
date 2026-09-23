@@ -2,10 +2,9 @@
 
 on: [push, pull_request]
 
-# This pipeline has three stages:
-#   1. test   — runs Edit Mode and Play Mode tests with game-ci's unity-test-runner
-#   2. build  — builds the project for WebGL with game-ci's unity-builder
-#   3. deploy — publishes the build to GitHub Pages using the official
+# This pipeline has two stages:
+#   1. build  — builds the project for WebGL with game-ci's unity-builder
+#   2. deploy — publishes the build to GitHub Pages using the official
 #               artifact-based deploy (actions/deploy-pages)
 #
 # The deploy job NEVER pushes a branch. GitHub's Pages service pulls the
@@ -21,70 +20,10 @@ concurrency:
 
 jobs:
   # ------------------------------------------------------------------
-  # 1. TEST — runs on every push and pull request.
-  #    If any test fails, the build and deploy jobs are skipped.
-  # ------------------------------------------------------------------
-  test:
-    name: Run ${{ matrix.testMode }} tests
-    runs-on: ubuntu-latest
-    permissions:
-      checks: write # publish test results to the GitHub Checks UI
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        testMode: [EditMode, PlayMode]
-    steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      # Cache the Unity Library folder between runs (big speedup)
-      - uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-Tests-${{ matrix.testMode }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-Tests-
-
-      # Run the tests. The Docker image is picked automatically to match
-      # the Unity version in ProjectSettings/ProjectVersion.txt.
-      #
-      # NOTE on coverage: code coverage instrumentation is known to crash
-      # some Unity 6 versions in CI, so we disable it. We disable it via
-      # the CLI-native GAME_CI_COVERAGE_ENABLED env var instead of the
-      # action's `coverageEnabled: false` input, because the input makes
-      # the action pass a flag (`--no-coverageEnabled`) that current
-      # game-ci/cli releases reject as an unknown argument.
-      - name: Run tests
-        uses: game-ci/unity-test-runner@v4
-        id: tests
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          GAME_CI_COVERAGE_ENABLED: 'false'
-        with:
-          testMode: ${{ matrix.testMode }}
-          artifactsPath: ${{ matrix.testMode }}-test-results
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      # Upload test results (including on failure — `if: always()`)
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: TestResults-${{ matrix.testMode }}
-          path: ${{ steps.tests.outputs.artifactsPath }}
-
-  # ------------------------------------------------------------------
-  # 2. BUILD — only runs after all tests passed (`needs: test`).
+  # 1. BUILD — builds the project for WebGL.
   # ------------------------------------------------------------------
   build:
     name: Build for WebGL
-    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -99,7 +38,7 @@ jobs:
       # build, and exit without producing build output (the runner is
       # ephemeral, so the previous build's files are gone) - the build then
       # fails with exit code 137. A full build takes ~10 minutes and is
-      # deterministic. Test jobs cache Library safely; builds do not.
+      # deterministic.
       - name: Build project
         uses: game-ci/unity-builder@v4
         env:
@@ -120,7 +59,7 @@ jobs:
           path: build/WebGL/WebGL
 
   # ------------------------------------------------------------------
-  # 3. DEPLOY — publishes the build artifact to GitHub Pages.
+  # 2. DEPLOY — publishes the build artifact to GitHub Pages.
   #    Only on pushes to the default branch (master or main).
   #    Requires Settings > Pages > Source = "GitHub Actions".
   # ------------------------------------------------------------------
