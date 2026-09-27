@@ -1,4 +1,4 @@
-﻿name: CI/CD
+name: CI/CD
 
 on: [push, pull_request]
 
@@ -85,6 +85,8 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       # Package the site into the special "github-pages" artifact
       - name: Upload Pages artifact
