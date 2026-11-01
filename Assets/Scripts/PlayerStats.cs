@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
@@ -44,13 +45,23 @@ public class PlayerStats : MonoBehaviour
     public int AggressiveActionsDone => aggressiveActionsDone;
 
     //Unseen / Glimpsed / Visible, based on the State Meter thresholds above
-    public PerceptionLevel CurrentPerception
+    public Perception CurrentPerception
     {
         get
         {
-            if (stateMeter >= visibleThreshold) return PerceptionLevel.Visible;
-            if (stateMeter >= glimpsedThreshold) return PerceptionLevel.Glimpsed;
-            return PerceptionLevel.Unseen;
+            Perception perception;
+            perception.levelValue = stateMeter / maxStateMeter;
+
+            if (stateMeter >= visibleThreshold) {
+                perception.perceptionLevel = Perception.LevelName.Visible;
+            }
+            if (stateMeter >= glimpsedThreshold) {
+                perception.perceptionLevel = Perception.LevelName.Glimpsed;
+            }
+            else {
+                perception.perceptionLevel = Perception.LevelName.Unseen;
+            }
+            return perception;
         }
     }
 
@@ -59,10 +70,10 @@ public class PlayerStats : MonoBehaviour
     public event Action<float> OnHealed; //amount healed
     public event Action OnDied;
     public event Action<float, float> OnStateMeterChanged; //max
-    public event Action<PerceptionLevel> OnPerceptionChanged;
+    public event Action<Perception> OnPerceptionChanged;
 
     private float invincibleTimer;
-    private PerceptionLevel lastPerception;
+    private Perception lastPerception;
 
     private void Awake()
     {
@@ -138,8 +149,8 @@ public class PlayerStats : MonoBehaviour
         stateMeter = Mathf.Clamp(value, 0f, maxStateMeter);
         OnStateMeterChanged?.Invoke(stateMeter, maxStateMeter);
 
-        PerceptionLevel now = CurrentPerception;
-        if (now != lastPerception)
+        Perception now = CurrentPerception;
+        if (now.levelValue != lastPerception.levelValue)
         {
             lastPerception = now;
             OnPerceptionChanged?.Invoke(now);
@@ -163,9 +174,21 @@ public class PlayerStats : MonoBehaviour
 }
 
 //it is how well the player can perceive hidden entities
-public enum PerceptionLevel
+//public enum PerceptionLevel
+//{
+//    Unseen,
+//    Glimpsed,
+//    Visible
+//}
+
+public struct Perception
 {
-    Unseen,
-    Glimpsed,
-    Visible
+    public enum LevelName
+    {
+        Unseen,
+        Glimpsed,
+        Visible
+    }
+    public LevelName perceptionLevel;
+    public float levelValue; // 0-1 
 }
