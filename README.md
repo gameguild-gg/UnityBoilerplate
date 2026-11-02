@@ -324,3 +324,14 @@ Screen shake, particles, and controller rumble
 What we cut first if we fall behind: the extra rooms and any enemy types past the first 2, so that we can focus on the signature encounter, the telegraphing, and keeping the WebGL build working.
 
 
+
+
+
+
+
+
+
+Boss Demo Video:
+https://youtu.be/oDLbD5kaubc
+
+
