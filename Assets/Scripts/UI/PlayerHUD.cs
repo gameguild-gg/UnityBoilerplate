@@ -89,18 +89,18 @@ public class PlayerHUD : MonoBehaviour
             stateText.text = $"State Meter {current:0} / {max:0}";
     }
 
-    private void UpdatePerception(PerceptionLevel level)
+    private void UpdatePerception(Perception perception)
     {
-        Color c = level switch
+        Color c = perception.perceptionLevel switch
         {
-            PerceptionLevel.Visible => visibleColor,
-            PerceptionLevel.Glimpsed => glimpsedColor,
+            Perception.LevelName.Visible => visibleColor,
+            Perception.LevelName.Glimpsed => glimpsedColor,
             _ => unseenColor
         };
 
         if (perceptionText != null)
         {
-            perceptionText.text = $"Perception: {level}";
+            perceptionText.text = $"Perception: {perception.perceptionLevel}";
             perceptionText.color = c;
         }
         if (stateFillImage != null)
