@@ -91,7 +91,7 @@ public class PlayerHUD : MonoBehaviour
 
     private void UpdatePerception(Perception perception)
     {
-        Color c = perception.perceptionLevel switch
+        Color c = perception.name switch
         {
             Perception.LevelName.Visible => visibleColor,
             Perception.LevelName.Glimpsed => glimpsedColor,
@@ -100,7 +100,7 @@ public class PlayerHUD : MonoBehaviour
 
         if (perceptionText != null)
         {
-            perceptionText.text = $"Perception: {perception.perceptionLevel}";
+            perceptionText.text = $"Perception: {perception.name}";
             perceptionText.color = c;
         }
         if (stateFillImage != null)

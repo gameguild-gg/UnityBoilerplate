@@ -50,16 +50,16 @@ public class PlayerStats : MonoBehaviour
         get
         {
             Perception perception;
-            perception.levelValue = stateMeter / maxStateMeter;
+            perception.value = stateMeter / maxStateMeter;
 
             if (stateMeter >= visibleThreshold) {
-                perception.perceptionLevel = Perception.LevelName.Visible;
+                perception.name = Perception.LevelName.Visible;
             }
             if (stateMeter >= glimpsedThreshold) {
-                perception.perceptionLevel = Perception.LevelName.Glimpsed;
+                perception.name = Perception.LevelName.Glimpsed;
             }
             else {
-                perception.perceptionLevel = Perception.LevelName.Unseen;
+                perception.name = Perception.LevelName.Unseen;
             }
             return perception;
         }
@@ -150,7 +150,7 @@ public class PlayerStats : MonoBehaviour
         OnStateMeterChanged?.Invoke(stateMeter, maxStateMeter);
 
         Perception now = CurrentPerception;
-        if (now.levelValue != lastPerception.levelValue)
+        if (now.value != lastPerception.value)
         {
             lastPerception = now;
             OnPerceptionChanged?.Invoke(now);
@@ -189,6 +189,6 @@ public struct Perception
         Glimpsed,
         Visible
     }
-    public LevelName perceptionLevel;
-    public float levelValue; // 0-1 
+    public LevelName name;
+    public float value; // 0-1 
 }
