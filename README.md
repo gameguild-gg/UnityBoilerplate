@@ -249,3 +249,78 @@ Nothing gets merged into main without a pull request that one other team member 
 Only the owner of a scene edits that scene.
 The board: everyone moves their own cards. "In Progress" means you are actually working on it that week, and when your pull request is open, the card goes to "Review".
 When someone misses a task: if you know you are going to miss a deadline, you tell the group in the channel before the deadline and not after. If it happens once, we re-plan it together at the next meeting and help out where we can, because things happen and that is okay. If it keeps happening without anyone being told, we bring it up with the instructor.
+
+
+
+
+
+
+
+
+ASCENDANT PoC Result & Scope Update
+Outcome: PARTIALLY PASSED
+I would say that the PoC passed for the most part. The main thing we wanted to test, the Scarcity Remnant boss that gets stronger when you attack it and weaker when you help, works the way we hoped it would, and it is readable and fair in the editor. The only part that did not fully pass is the WebGL build, which still needs some fixing before it runs the way it should in the browser. Since that is a technical problem and not a problem with the idea itself, we do not need to pivot, and the core of the project stays the same.
+Evidence
+We tested the boss in the Unity editor. We used the debug keys 8 (attack, which feeds the boss) and 9 (help, which starves the boss) 
+#
+Criterion (from POC.md)
+Result
+Evidence
+1
+Testers can tell whether the boss got stronger or weaker
+Passed
+Most people and players could tell from the boss growing or shrinking, the color changes, the animations, and the room getting darker or brighter.
+2
+Every attack is warned for at least 0.6 s and can be dodged
+Passed
+The slam (growing red circle) and the lunge (red lane) are always telegraphed before they hit, and testers were able to dodge them once they saw them a couple of times.
+3
+Attacking pushes it toward Ravenous, and helping makes it transform
+Passed
+Attacking made it reach Ravenous after some hits, and helping made it transform after 4 helpful actions.
+4
+No unwinnable spiral
+Passed
+Helping always interrupts the boss's attacks, and the boss waits longer between attacks when the player is low on health, so even after attacking a lot the player can still turn the fight around.
+5
+Runs as a WebGL build
+ Partial
+The game builds for WebGL, but it is not the full build with all of the branches like the boss one yet (mainly just have not gotten around to merging and fixing that) 
+
+
+What we are changing
+Because the boss and the core idea passed, we are not cutting anything or pivoting. The only change is that fixing the WebGL build becomes our first task for Alpha, because the final game has to run in the browser and we do not want to find more build problems later on. I think that it is better that we found this now, early, rather than right before a deadline.
+To fix it, we plan to:
+Check the WebGL publishing settings (Gzip compression with Decompression Fallback, or turning compression off) so that it loads on itch.io.
+Make a Development Build so that the debug keys work in the browser for testing.
+Make sure the boss room scene is in the build's scene list.
+Rebuild and test it in more than one browser at each milestone, like we planned in Risk 3 of our PLAN.md.
+We also already changed one thing while building the PoC: the signature encounter was planned for Beta, but we moved it up because it was our riskiest assumption. Because of that, the chaser enemy and the proximity detection have not been fully started yet, and they move to Alpha kind of.
+One thing the PoC can't answer yet is whether players figure out on their own that helping is how you win, because helping is still a debug key. We will test that in Alpha once the first real helpful action is in the game.
+Updated Must / Should / Could
+Must
+Player movement, animation, health, and State Meter UI (done)
+The Scarcity Remnant signature encounter (first version done in the PoC)
+A working WebGL build on itch.io (changed: now the first Alpha task)
+At least one real helpful action in the world that weakens the boss, like escorting a civilian (new)
+The player's attack feeds the boss (new: replaces debug key 8)
+Ground chaser enemy with an FSM and A* pathfinding (moved to Alpha)
+Off-axis enemy with telegraphing
+Perception states (Unseen, Glimpsed, Visible)
+One civilian NPC with an FSM
+Controlled encounter generation
+AI documentation and the process report
+Should
+3–4 enemy types in total
+A behavior tree version of one enemy
+The world getting darker or brighter with Scarcity and the State Meter
+3–5 premade rooms connected with doors
+Sound effects for telegraphs and boss reactions
+Could
+5+ enemy types and a separate boss
+A flocking swarm enemy
+Randomized obstacles inside rooms
+Screen shake, particles, and controller rumble
+What we cut first if we fall behind: the extra rooms and any enemy types past the first 2, so that we can focus on the signature encounter, the telegraphing, and keeping the WebGL build working.
+
+
