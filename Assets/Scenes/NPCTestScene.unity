@@ -132,6 +132,9 @@ GameObject:
   - component: {fileID: 90592708}
   - component: {fileID: 90592710}
   - component: {fileID: 90592709}
+  - component: {fileID: 90592713}
+  - component: {fileID: 90592712}
+  - component: {fileID: 90592714}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -188,7 +191,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ccc508108fa6ed4fa11b4a467d7f609, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -209,8 +212,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -228,7 +231,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   currentState: 0
   canTalk: 0
-  interactionDialogue: {fileID: 0}
+  interactionDialogue: {fileID: 11400000, guid: 49f09038bd3b94445ad57835e170efd4, type: 2}
+  playerInRange: 0
+  inputActions: {fileID: 0}
+  fleeState: {fileID: 0}
+  patrolState: {fileID: 0}
+  followState: {fileID: 0}
 --- !u!58 &90592709
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -292,6 +300,46 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 3
+--- !u!114 &90592712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90592705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affc63fec4d327b4488f485724d3b255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  patrolSpeed: 0
+--- !u!114 &90592713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90592705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6fc70b360b6004fb3a54d1b288f84b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  fleeSpeed: 0
+--- !u!114 &90592714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90592705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b0da7b65bfba14997e9ff545a382f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPC_Follow
+  playerMovement: {fileID: 0}
+  followSpeed: 0
 --- !u!1 &121012196
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,7 +797,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1868711039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -848,6 +896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   spriteImage: {fileID: 211813868}
   UITextMeshPro: {fileID: 121012198}
+  text: []
 --- !u!1 &2099821009
 GameObject:
   m_ObjectHideFlags: 0

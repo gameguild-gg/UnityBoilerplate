@@ -15,6 +15,7 @@ public class DialogueCanvas : MonoBehaviour
     void Start()
     {
         this.gameObject.SetActive(false);
+        Instance = this;
     }
 
     public void ContinueThroughText()
