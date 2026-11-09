@@ -14,7 +14,7 @@ public class NPC : MonoBehaviour
         FOLLOWING,
     }
 
-    [SerializeField] NPC_States currentState;
+    [SerializeField] NPC_States currentState= NPC_States.DEFAULT;
     [Tooltip("The current state that the NPC is in.")]
 
     [SerializeField] bool canTalk=false;
@@ -60,24 +60,30 @@ public class NPC : MonoBehaviour
         switch (currentState)
         {
             case NPC_States.NONE:
-                break;
-
+                Debug.Log("RUH ROH");
+                return;
+                
             case NPC_States.DEFAULT:
                 DefaultState();
-                break;
+                return;
 
             case NPC_States.CAUTIOUS:
                 CautiousState();
-                break;
+                return;
 
             case NPC_States.FLEEING:
-                break;
+                canTalk = false;
+                fleeState.Flee();
+                return;
 
             case NPC_States.PATROLLING:
-                break;
+                patrolState.Patrol();
+                return;
 
             case NPC_States.FOLLOWING:
-                break;
+                canTalk = false;
+                followState.Follow();
+                return;
         }
     }
 
@@ -102,11 +108,18 @@ public class NPC : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other);
         if(other.gameObject.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
             playerInRange = true;
             DialogueCanvas.Instance.UpdateText(interactionDialogue.dialogue); //instance isnt working
 
+        }
+
+        if(other.gameObject == followState.dropOffPoint)
+        {
+            Debug.Log("DROP OFF NPC");
+            currentState= NPC_States.DEFAULT;
         }
     }
 

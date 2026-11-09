@@ -2,19 +2,30 @@ using UnityEngine;
 
 public class NPC_Follow : MonoBehaviour
 {
-    [SerializeField] PlayerMovement playerMovement;
-
+    [SerializeField] GameObject player;
     [SerializeField] int followSpeed;
+    [SerializeField] int seperationDistance;
+    [SerializeField ] public GameObject dropOffPoint;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        //follow speed should be equal to or slightly less than player speen
+        player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Follow()
     {
-        
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distance > seperationDistance)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                player.transform.position,
+                followSpeed * Time.deltaTime
+            );
+        }
     }
+
+  
 }
