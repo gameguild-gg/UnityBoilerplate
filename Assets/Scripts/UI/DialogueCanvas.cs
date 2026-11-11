@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 public class DialogueCanvas : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class DialogueCanvas : MonoBehaviour
     public static DialogueCanvas Instance;
     [SerializeField] Image spriteImage;
     [SerializeField] TMPro.TMP_Text UITextMeshPro;
-    [SerializeField] string[] text;
+    [SerializeField] string text;
 
     private InputAction interactAction; //I need to remeber how the new input system works lol
     void Start()
@@ -34,7 +35,9 @@ public class DialogueCanvas : MonoBehaviour
 
     public void UpdateText(string[] txt)
     {
-        text = txt;
+        this.gameObject.SetActive(true);
+        text = string.Join("/", txt);
+        UITextMeshPro.text = text;  
     }
 
     public void UpdateImage(Image image)

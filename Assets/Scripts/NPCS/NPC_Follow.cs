@@ -5,7 +5,6 @@ public class NPC_Follow : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] int followSpeed;
     [SerializeField] int seperationDistance;
-    [SerializeField ] public GameObject dropOffPoint;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -26,6 +25,4 @@ public class NPC_Follow : MonoBehaviour
             );
         }
     }
-
-  
 }

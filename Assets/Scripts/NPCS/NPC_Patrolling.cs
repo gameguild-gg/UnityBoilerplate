@@ -31,7 +31,6 @@ public class NPC_Patrolling : MonoBehaviour
         // Check if close enough to the waypoint
         if (Vector3.Distance(transform.position, targetWaypoint.position) <= reachThreshold)
         {
-            // Move to the next waypoint in the array, loop back at the end
             currentTarget = (currentTarget + 1) % targets.Length;
         }
     }

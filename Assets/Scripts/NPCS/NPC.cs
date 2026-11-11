@@ -25,6 +25,7 @@ public class NPC : MonoBehaviour
     [Tooltip("Checks if the player is in range to interact with the NPC")]
 
     [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] DialogueCanvas dialogueCanvas;
 
     [Header("Other State Scripts")]
     [SerializeField] NPC_Flee_State fleeState;
@@ -77,6 +78,7 @@ public class NPC : MonoBehaviour
                 return;
 
             case NPC_States.PATROLLING:
+                canTalk = false;
                 patrolState.Patrol();
                 return;
 
@@ -101,26 +103,20 @@ public class NPC : MonoBehaviour
         if(playerInRange &&
             canTalk)
         {
-            DialogueCanvas.Instance.UpdateText(interactionDialogue.dialogue);
+            dialogueCanvas.UpdateText(interactionDialogue.dialogue);
         }
     }
 
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other);
         if(other.gameObject.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
             playerInRange = true;
-            DialogueCanvas.Instance.UpdateText(interactionDialogue.dialogue); //instance isnt working
-
+            //this can be called when player interacts with the NPC
+            Talk();
         }
 
-        if(other.gameObject == followState.dropOffPoint)
-        {
-            Debug.Log("DROP OFF NPC");
-            currentState= NPC_States.DEFAULT;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -128,7 +124,8 @@ public class NPC : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerMovement>(out PlayerMovement player))
         {
             playerInRange = false;
+            dialogueCanvas.gameObject.SetActive(false);
         }
-    }
 
+    }
 }

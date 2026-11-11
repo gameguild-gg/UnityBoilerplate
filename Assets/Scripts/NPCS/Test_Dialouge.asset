@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Test_Dialouge
   m_EditorClassIdentifier: Assembly-CSharp::NPC_Dialouge
   dialogue:
-  - Please Work!
+  - LOL

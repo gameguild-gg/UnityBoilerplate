@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/NPCTestScene.unity
+    guid: dc9b15bcf1674304499445049b6c050b
+  - enabled: 1
     path: Assets/Scenes/BossTestScene.unity
     guid: 983ca034be265524486dddf939d2e681
   - enabled: 1
