@@ -1,0 +1,9 @@
+Pixel Fantasy Golem (Golem v5) by Kalponic Studio
+https://kalponic-studio.itch.io/pixel-fantasy-golem-character
+
+License (from the itch.io page): free to use for personal or commercial projects; editing and
+modifying is allowed; you may NOT resell the asset (original or modified) or use it in a logo,
+trademark or service mark. Credit is optional but appreciated.
+
+Modifications for ASCENDANT: each 256x256 frame was cropped to 200x200 around the golem's body
+(same 4x4 frame order), and the files were renamed (A1/A2/A3 -> Attack1/2/3).
